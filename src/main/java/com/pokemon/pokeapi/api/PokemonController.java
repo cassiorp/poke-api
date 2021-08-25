@@ -30,9 +30,14 @@ public class PokemonController {
         return pokemonService.save(pokemonStoreModel);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
-        pokemonService.deleteById(id);
+//    @DeleteMapping("/{id}")
+//    public boolean delete(@PathVariable String id) {
+//        return pokemonService.deleteById(id);
+//    }
+
+    @DeleteMapping("/{name}")
+    public boolean delete(@PathVariable String name) {
+        return pokemonService.deleteByName(name);
     }
 
 }

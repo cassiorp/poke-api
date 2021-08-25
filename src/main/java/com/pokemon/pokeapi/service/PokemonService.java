@@ -1,5 +1,6 @@
 package com.pokemon.pokeapi.service;
 
+import com.pokemon.pokeapi.dto.RotinaDTO;
 import com.pokemon.pokeapi.model.PokemonModel;
 import com.pokemon.pokeapi.model.PokemonStoreModel;
 import com.pokemon.pokeapi.repository.PokemonStoreRepository;
@@ -39,14 +40,39 @@ public class PokemonService {
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Não encontrado"));
     }
 
-    public void deleteById(String id) {
+    public boolean deleteById(String id) {
+        findById(id);
         try {
             pokemonStoreRepository.deleteById(id);
+            if(pokemonStoreRepository.existsById(id)){
+                return false;
+            }
+            return true;
         }catch (RuntimeException e) {
             throw new ResponseStatusException(NOT_FOUND);
         }
     }
 
+    public boolean deleteByName(String name) {
+        PokemonStoreModel  model = pokemonStoreRepository.findByName(name).orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        try {
+            pokemonStoreRepository.delete(model);
+            if(pokemonStoreRepository.existsById(model.getId())){
+                return false;
+            }
+            return true;
+        }catch (RuntimeException e) {
+            throw new ResponseStatusException(NOT_FOUND);
+        }
+    }
+
+
+    public PokemonStoreModel upate(RotinaDTO rotinaDTO) {
+        PokemonStoreModel pokemonModel = pokemonStoreRepository.findById(rotinaDTO.getId())
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND));
+        pokemonModel.setRating(rotinaDTO.getRating());
+        return pokemonStoreRepository.save(pokemonModel);
+    }
 //    public PokemonStoreModel update(PokemonStoreModel pokemonStoreModel, String id) {
 //        PokemonStoreModel ifExists = findById(id);
 //        if(ifExists != null )

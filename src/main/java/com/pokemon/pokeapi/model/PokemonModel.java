@@ -25,4 +25,6 @@ public class PokemonModel {
     private Integer attack;
     @NotNull
     private Integer defense;
+    @NotNull
+    private float rating;
 }
